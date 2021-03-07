@@ -2,6 +2,7 @@
 import bart from './bartsimpson.json'
 import Element from './components/Element';
 import List from './components/List.js'
+// import "./styles.css"
 
 
 function App() {  
