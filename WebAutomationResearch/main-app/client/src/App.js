@@ -2,73 +2,70 @@
 import bart from './bartsimpson.json'
 import Element from './components/Element';
 import List from './components/List.js'
+import Home from './components/Home.js'
 // import "./styles.css"
+import React from 'react'
+import { BrowserRouter, Route, Link, Switch} from "react-router-dom";
 
 
-function App() {  
-var clonedJSON = bart;
-  console.log(clonedJSON)
-  var uniqid = require('uniqid');
 
-  const [elements, setElements] = useState({ apiResponse: "" });
-  useEffect (() => {
-    setElements(bart[0])
-  },[])
-
-  const[initialState, setInitialState] = useState([]);
-
-  useEffect (() =>{
-    
-  })
-
-
-  // callAPI(){
-  //     fetch("http://localhost:9000/testAPI")
-  //         .then(res => res.text())
-  //         .then(res => this.setState({ apiResponse: res }));
-  // }
-
-  // componentWillMount() {
-  //     this.callAPI();
-  // }ss
-
-
-  
-
-  function modifyKeys(obj){
-    Object.keys(obj).forEach(key => {
-      var id = uniqid();
-      var mainid = id;
-        obj[`${mainid}_${key}`] = obj[key];
-        delete obj[key];
-        if(typeof obj[`${mainid}_${key}`] === "object"){
-            modifyKeys(obj[`${mainid}_${key}`]);
-        }
-    });
-  }
-
-
+class App extends React.Component {
   constructor(props){
     super(props);
-    this.state = { apiResponse: "" };
+    this.state = {apiResponse:""}
   }
 
-  callAPI() {
-    fetch("http://localhost:9000/testAPI")
-        .then(res => res.text())
-        .then(res => this.setState({ apiResponse: res }));
-}
+  // callAPI(){
+  //   fetch("http://localhost:9000/testAPI")
+  //     .then(res => res.text())
+  //     .then(res => res.setState({apiResponse: res}));
+  // }
 
- 
-  return (
-    <div className="App">
-      {/* <List collection={bart}/> */}
-      {console.log(modifyKeys(clonedJSON))}
-      <Element data = {bart}/>
-      {/* {newObject(bart)} */}
-      <p className = "App-intro">{</p>>
-    </div>
-  );
+  // componentWillMount(){
+  //   this.callAPI();
+  // }
+
+
+  render(){
+    const App = () => (
+      <div>
+        <Switch>
+          <Route path = '/CreateForm' 
+            render = {(props) =>(
+              <Element data = {bart}/>
+            )}
+          />
+          <Route exact path='/' component={Home}/>
+        </Switch>
+      </div>
+    )
+
+    return (
+      <Switch>
+        <App />
+      </Switch>
+    );
+
+
+    
+    var clonedJSON = bart;
+    console.log(clonedJSON)
+    var uniqid = require('uniqid');
+
+    // function modifyKeys(obj){
+    //   Object.keys(obj).forEach(key => {
+    //     var id = uniqid();
+    //     var mainid = id;
+    //       obj[`${mainid}_${key}`] = obj[key];
+    //       delete obj[key];
+    //       if(typeof obj[`${mainid}_${key}`] === "object"){
+    //           modifyKeys(obj[`${mainid}_${key}`]);
+    //       }
+    //   });
+    // }
+
+
+  }
 }
 
 export default App;
