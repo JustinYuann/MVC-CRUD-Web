@@ -12,6 +12,7 @@ import DatePicker from "react-datepicker";
 const Element = (data) => { 
   var uniqid = require('uniqid');
   var parseISO = require('date-fns/parseISO')
+  var jp = require('jsonpath');
 
   const { register, handleSubmit, watch, errors } = useForm();
   const onSubmit = data => console.log(data);
@@ -45,21 +46,22 @@ const Element = (data) => {
     else return 'other';
   }
 
+  function dropdownPaser(p){
+    var value = p;
+    return <option value = {value}>{value}</option>
+  }
+
   //This function will take in what type has been declared and return the applicable field
   function identififyType(field,key){
-    console.log(field)
     var fieldType= (field[Object.keys(field)[0]])
     var fieldValue = (field[Object.keys(field)[1]])
-
-    console.log(fieldType,fieldValue)
-
     //fieldType refers to the field's type for example date or time
     //fieldValue refers to the value set by the JSON for example "19/02/1904"
 
     if (fieldType === "date"){
       // var parsedDate = (parseISO('2016-01-01'), 1)
       // return <DatePicker selected={parsedDate}  onChange={null}/>
-      return <input type = "datetime-local" placeholder = {fieldValue} name = {key} />
+      return <input type = "datetime-local" placeholder = {fieldValue} name = {key} ref={register} />
 
     } else if (fieldType === "select"){
       //'select' refers to boolean values
@@ -70,13 +72,25 @@ const Element = (data) => {
         <option value="No">No</option>
       </select>
       </div>)
-    }else{
+
+    } else if (fieldType === "entryBox"){
+      console.log("why")
+      return <textarea {...register} />
+
+    } else if (fieldType === "dropdown"){
+      let returnObject = [];
+      returnObject.push(
+        <select {...register} ref={register}>
+          {fieldValue.map(dropdownPaser)}
+        </select>
+      )
+      return returnObject
+    } else {
       return null;
     }
   }
   
   const recursiveParser = object => { 
-
     var insideObject = false;
       const entries = Object.entries({ ...object });
       let children = [];
@@ -115,7 +129,6 @@ const Element = (data) => {
             )
 
           }
-
         // } else {
         //   value.forEach(([key, value]) => {
 
@@ -156,7 +169,7 @@ const Element = (data) => {
     return result;
   
     function doIt(data, s) {
-      if (typeof data === "object") {
+      if (data && typeof data === "object") {
         if (Array.isArray(data)) {
           for (var i = 0; i < data.length; i++) {
             doIt(data[i], s + "[" + i + "]");
@@ -165,6 +178,7 @@ const Element = (data) => {
           for (var p in data) {
             if (validId.test(p)) {
               doIt(data[p], s + "." + p);
+
             } else {
               doIt(data[p], s + "[\"" + p + "\"]");
             }

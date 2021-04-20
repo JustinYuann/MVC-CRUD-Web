@@ -18,10 +18,10 @@
         "senior" : {
             "type" : "select",
             "value" : true
-        },
-        "providedNames":{
-            "nameOne" : "Romin",
-            "nameTwo" : "Roman"
+        },  
+        "providedNames": {
+            "type" : "dropdown",
+            "value" : ["Romin","Roman"]
         }
         }   
     ]
